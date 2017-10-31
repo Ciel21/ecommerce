@@ -9,7 +9,7 @@ class User extends Model{
    const SESSION = "User";
 
 protected $fields = [
-		"iduser", "idperson", "deslogin", "despassword", "inadmin", "dtergister"
+		"iduser", "idperson", "deslogin", "despassword", "inadmin", "dtergister", "desperson", "nrphone" , "desemail"
 	];
 
 	public static function login($login, $password)
@@ -85,6 +85,8 @@ public static function logout()
 
 public function get($iduser)
  {
+ 
+
  $sql = new Sql();
  $results = $sql->select("SELECT * FROM tb_users a INNER JOIN tb_persons b USING(idperson) WHERE a.iduser = :iduser", array(
  ":iduser"=>$iduser
@@ -99,12 +101,30 @@ public function get($iduser)
 
 $sql = new Sql();
 
-return $sql->SELECT("SELECT * FROM tb_users a INNER JOIN tb_persons b USING(idperson) ORDER BY b.desperson");
+
+return  $sql->select("SELECT * FROM tb_users a INNER JOIN tb_persons b USING(idperson) ORDER BY b.desperson");
 
 //$result = $sql->SELECT("SELECT * FROM tb_users a INNER JOIN tb_persons b USING(idperson) WHERE a.iduser = :iduser");
  }
 
 
+public function save()
+{
+
+$sql  = new Sql();
+$results = $sql->select("CALL sp_users_save(:desperson, :deslogin, :desemail, :nrphone, :inadmin)", array(
+     ":desperson"=>$this->getdesperson(),
+     ":deslogin"=>$this->getdeslogin(),
+     ":despassword"=>$this->getdespassword(),
+     ":desemail"=>$this->getdesemail(),
+     ":nrphone"=>$this->getnrphone(),
+     ":inadmin"=>$this->inadmin()
+
+));
+
+     $this->setData($results[0]);
+
+}
 
 }
 

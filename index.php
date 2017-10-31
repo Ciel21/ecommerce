@@ -80,6 +80,16 @@ User::verifyLogin();
 
 $page = new PageAdmin();
 $page->setTpl("users-create");
+$user = new User();
+
+$_POST["inadmin"] = (isset($_POST["inadmin"]))?1:0;
+
+$user->setData($_POST);
+$user->save();
+header("Location: /admin/users");
+exit;
+
+
 
 });
 
